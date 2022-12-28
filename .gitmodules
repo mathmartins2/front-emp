@@ -1,0 +1,6 @@
+[submodule "src/modules/common"]
+	path = src/modules/common
+	url = https://git-codecommit.us-east-1.amazonaws.com/v1/repos/ea-front-commons
+[submodule "src/modules/api"]
+	path = src/modules/api
+	url = https://git-codecommit.us-east-1.amazonaws.com/v1/repos/ea-front-api

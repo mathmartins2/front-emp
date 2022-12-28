@@ -1,0 +1,25 @@
+.container{
+    margin-top: 10px;
+    background-color: var(--color-dark-blue-2);
+    color: #fff;
+    width: 326px;
+    border-radius: 0px 50px 50px 0px;
+    height: 42px;
+    display: flex;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Montserrat';
+    font-style: normal;
+    margin-left: -20px;
+    
+    & .numberStep{
+        padding: 11px 20px;
+        width: 48px;
+    }
+    & .border{
+        border-right: 1px solid #fff;
+    }
+    & .titleStep{
+        padding: 11px 5px 11px 26px;
+    }
+}

@@ -1,0 +1,122 @@
+.button__sucess {
+    background-color: var(--color-green-main);
+    border-radius: 5px;
+    padding: 16px 24px;
+
+    font-family: var(--fonte-corpo);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-green-2);
+    }
+
+    &>i {
+        animation: rotate 1s linear infinite;
+
+        @keyframes rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    }
+
+    &.button__sucess--disabled {
+        opacity: 0.8;
+        pointer-events: none;
+    }
+}
+
+.button__cancel--outline {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-red-main);
+    border-radius: 5px;
+    padding: 16px 24px;
+
+    font-family: var(--fonte-corpo);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: var(--color-red-main);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-red-3);
+    }
+}
+
+.button__cancel--simple {
+    border: 1px solid rgba(0, 21, 42, 0.5);
+    border-radius: 5px;
+    background: var(--color-neutral-7);
+    font-family: var(--fonte-corpo);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #00152A;
+    cursor: pointer;
+    padding: 16px 24px;
+
+
+    &:hover {
+        background-color: var(--color-neutral-6);
+    }
+}
+
+.button__filter {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: var(--color-dark-blue-main);
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-dark-blue-2);
+    }
+
+    i {
+        color: #FFFFFF;
+    }
+}
+
+.size_md {
+    padding: 13px 24px;
+}
+
+.button__info {
+    background-color: var(--color-blue-3);
+    border-radius: 5px;
+    padding: 16px 24px;
+
+    font-family: var(--fonte-corpo);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-blue-2);
+    }
+
+    &>i {
+        animation: rotate 1s linear infinite;
+
+        @keyframes rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    }
+
+    &.button__info--disabled {
+        opacity: 0.8;
+        pointer-events: none;
+    }
+}

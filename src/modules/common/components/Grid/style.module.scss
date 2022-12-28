@@ -1,0 +1,147 @@
+.full{
+  border: 1px solid  rgb(3, 0, 3);
+}
+.titles{
+  width: 100%;
+  color: rgb(255, 255, 255);
+  font-weight: 500;
+  background-color: var(--color-dark-blue-2);
+  font-size: 16px;
+  font-style: normal;
+  line-height: 20px;
+}
+.titleListe{
+  display: flex;
+}
+.listConteudo{
+  background-color: rgb(255, 255, 255);
+  color: var(--color-neutral-2)
+}
+
+.grid{
+  width: 100%;
+
+  .grid__row{
+    display: flex;
+    padding: 9px 18px;
+
+    .checkbox{
+      margin-right: 18px;
+      pointer-events: none;
+    }
+
+    .row__content {
+      display: block;
+      white-space: nowrap;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 10px;
+
+      & i{
+        font-size: 22px;
+      }
+    }
+  }
+
+  .grid__header{
+    background-color: var(--color-dark-blue-2);
+    border-radius: 5px 5px 0px 0px;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #fff;
+
+    .grid__header--withButton{
+      margin-left: 34px;
+    }
+  }
+
+  .grid__lines{
+    background-color: #fff;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--color-neutral-2);
+    border: 1px solid rgba(0, 39, 78, 0.2);
+    border-top: 0px;
+    cursor: pointer;
+
+    &.grid__lines--active{
+      background-color: #2778a01e;
+      padding: 12px 18px;
+      margin-left: -2px;
+      margin-right: -2px;
+      border: 1px solid var(--color-blue-1);
+    }
+
+    &.grid__lines--nocontent{
+      cursor: default;;
+    }
+  }
+
+  .button_empreende{
+    background-color: var(--color-blue-1);
+    border-radius: 0px 0px 5px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    color: #fff;
+    margin-left: -2px;
+    margin-right: -2px;
+    width: calc(100% + 4px);
+
+    &.button_empreende--fadeIn{
+      opacity: 1;
+    }
+
+    .options__left{
+      display: flex;
+      padding: 0px 18px;
+      font-family: Ubuntu;
+      font-size: 20px;
+      font-weight: 500;
+
+      i {
+        font-size: 16px;
+        margin-right: 16px;
+        cursor: pointer;
+      }
+    }
+
+    .options__right{
+      display: flex;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 15px;
+
+      .option{
+        padding: 12px 24px;
+        cursor: pointer;
+        border-left: 1px solid rgba(255, 255, 255, 0.2);
+
+        &:hover{
+          background-color: #00c0eb75;
+        }
+
+        i {
+          font-size: 16px;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+   
+
+
+

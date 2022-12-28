@@ -1,0 +1,95 @@
+.container{
+    
+    & .title{
+    color:var (--color-neutral-main); 
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    }
+
+    & .options {
+        display: inline-flex;
+        
+        & .optionsRadio{
+            margin: 21px 8px 0px 0px;
+            display: flex;
+            align-items: center;
+            cursor: pointer; 
+        }
+
+        & .optionsTitle{
+            padding: 20px 16px 0px 0px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--color-neutral-main);
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 17px;
+        }
+
+        & .radio{
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid var(--color-neutral-2);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        & .radio:before{
+            content: '';
+            position: absolute;
+            height: 10px;
+            width: 10px;
+            background-color: rgba(0, 27, 55, 0.5);
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        & .radio:checked:before{
+            opacity: 1;
+        }
+    }
+  
+    
+    // }
+    // & .optionInput{
+    //     color:var (--color-neutral-main); 
+    //     font-size: 14px;
+    //     font-weight: 700;
+    //     line-height: 17px;
+    //     font-family: 'Montserrat';
+    //     font-style: normal;
+    
+    //     & .radio{
+    //         display: flex;
+    //         padding: 21px 12px 0px 0px;
+
+    //         & .radioLeft{
+    //             display: flex;
+
+    //             & .radioTitleLeft{
+    //                 margin-left: 8px;  
+    //             }
+    //         }
+
+    //         & .radioRigth{
+    //             display: flex;
+    //             padding-left: 16px;
+
+    //             & .radioTitleRigth{
+    //                 margin-left: 8px;
+    //             }
+    //         }
+    //     }
+    // }
+}

@@ -1,0 +1,79 @@
+$pc: 1024px;    // PC screen size.
+$tablet: 768px; // Tablet screen size.
+$phone: 320px;  // Phone screen size.
+
+@mixin responsive($media) {
+  @if $media == phone {
+    @media only screen and (max-width: ($tablet - 1)) {
+      @content;
+    }
+  }
+  @else if $media == tablet {
+    @media only screen and (min-width: $tablet) and (max-width: ($pc - 1)) {
+      @content;
+    }
+  }
+  @else if $media == pc {
+    @media only screen and (min-width: $pc) {
+      @content;
+    }
+  }
+  @else if $media == pc_tablet {
+    @media only screen and (min-width: $tablet) {
+      @content;
+    }
+  }
+}
+
+.main {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 90px;
+
+    @media only screen and (min-width: 1440px) {
+      & {
+        max-width: 1140px;
+      }
+    }
+
+    .title__page{
+        font-family: Ubuntu;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 40px;
+        color: #000000;
+        margin-bottom: 32px;
+    }
+    
+    .group_input{
+        padding: 32px 0;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 24px;
+    }
+    
+    .footer{
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0px;
+        margin-left: -20px;
+        border-top: 1px solid #00274e33;
+        background-color: #fff;
+
+        @include responsive(pc) {
+            width: calc(100% - 322px);
+        }
+
+        @include responsive(tablet) {
+            width: calc(100% - 80px);
+        }
+
+        @include responsive(mobile) {
+            width: calc(100%);
+        }
+    }
+}

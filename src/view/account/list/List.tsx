@@ -7,14 +7,17 @@ import {
     ModalSelectAccountWithFooter,
     SearchBar,
     accountToHttp,
-    gridButtonConfigs,
     gridConfig,
-    selectBanksOptions,
     selectOptions,
     useEffect,
     useForm,
     useQuery,
-    useState
+    useState,
+    useQueryClient,
+    ModalConfirmation,
+    IBank,
+    dateToIso,
+    dateToString
 } from '../helpers/protocols/account-protocols'
 import SelectBasic from '@common/components/Select/Basic';
 import Grid from '@common/components/Grid';
@@ -22,16 +25,24 @@ import api from '@/modules/api';
 import BankCard from '@common/components/BankCard';
 import BankImg from '@assets/img/bank.png';
 import BoxImg from '@assets/img/box.png';
+import IconBank from '@assets/img/celular.svg';
+import IconBox from '@assets/img/money.svg';
 import styled from './style.module.scss';
-import axios from 'axios';
+import { useKeycloak } from '@react-keycloak/web';
 
 const List = () => {
+    const result =  useKeycloak();
+    console.log(result)
+    const queryClient = useQueryClient();
     const [openSelectModalAccount, setOpenSelectModalAccount] = useState<boolean>(false);
     const [openBankingModalAccount, setOpenBankingModalAccount] = useState<boolean>(false);
+    const [openBankingModalEditAccount, setOpenBankingModalEditAccount] = useState<boolean>(false);
     const [openBankingModalAccountBox, setOpenBankingModalAccountBox] = useState<boolean>(false);
+    const [openBankingModalEditAccountBox, setOpenBankingModalEditAccountBox] = useState<boolean>(false);
+    const [openModalInactivate, setOpenModalInactivate] = useState<boolean>(false);
+    const [currentAccount, setCurrentAccount] = useState<string>("");
     const [situation, setSituation] = useState<string>('mostrar');
     const [search, setSearch] = useState<string>('');
-
     const { setValue, register, getValues, watch, control, handleSubmit } = useForm({});
     const watchSituation = watch("situation");
 
@@ -40,11 +51,22 @@ const List = () => {
     }, [watchSituation])
 
     const { data, isFetching } = useQuery<IAccountList[]>('accounts', async () => {
-        const { data } = await axios.get('http://9bb8-170-238-214-222.ngrok.io/account/from/032250b8-1437-4dd3-8aff-76d64970cd3a');
+        const { data } = await api.get('http://localhost:3000/account/from/032250b8-1437-4dd3-8aff-76d64970cd3a');
 
-        return accountToHttp(data);
+        return accountToHttp(data.accounts);
     }, {
-        staleTime: 1000 * 60, // 1 minute
+        staleTime: 1000 * 60 * 60 * 60,
+    })
+
+    const { data: banks } = useQuery('banks', async () => {
+        const { data } = await api.get('http://localhost:3000/account/banks');
+        return data.banks.map((item: IBank) => {
+            return {
+                text: item.fullName,
+                value: item.id,
+                icon: <img src={item.icon}></img>
+            }
+        });
     })
 
     const filteredData = search.length > 0 ?
@@ -53,64 +75,123 @@ const List = () => {
             filter(data => data.situation === situation || situation === 'mostrar')
         : [];
 
-    const handleSaveAccountBank = async (data: any) => {
-        const { accountName, bank, balance } = data;
-        if (!accountName) {
-            alert('Nome da conta é obrigatório');
-            return;
-        }
-        if (!bank) {
-            alert('Banco é obrigatório');
-            return;
-        }
-        if (!balance) {
-            alert('Saldo é obrigatório');
-            return;
-        }
-        if (balance < 0) {
-            alert('Saldo não pode ser negativo');
-            return;
-        }
+    const handleSaveAccountBank = async (data) => {
+        const { accountName, bank, balance, initialBalanceDate } = data.account;
         try {
-            await api.post('/account', {
+            await api.post('http://localhost:3000/account/create', {
                 name: accountName,
                 category: openBankingModalAccount ? 'conta_bancaria' : 'conta_caixa',
                 bankId: bank,
-                balance: balance,
+                balance: Number(balance),
                 situation: true,
-                user_id: '032250b8-1437-4dd3-8aff-76d64970cd3a'
+                initialBalanceDate: new Date(initialBalanceDate).toISOString(),
+                userId: '032250b8-1437-4dd3-8aff-76d64970cd3a'
             })
+            await queryClient.invalidateQueries(['accounts'])
+            setOpenSelectModalAccount(false)
+            setOpenBankingModalAccount(false)
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
+
+    const handleSaveAccountBankBox = async (data) => {
+        const { accountName, balance,  } = data.account;
+        try {
+            await api.post('http://localhost:3000/account/create', {
+                name: accountName,
+                category: openBankingModalAccount ? 'conta_bancaria' : 'conta_caixa',
+                balance: Number(balance),
+                situation: true,
+                userId: '032250b8-1437-4dd3-8aff-76d64970cd3a'
+            })
+            await queryClient.invalidateQueries(['accounts'])
+            setOpenSelectModalAccount(false)
+            setOpenBankingModalAccountBox(false)
         } catch (error) {
             console.log(error)
         }
     }
 
-    const handleSaveAccountBankBox = async (data: any) => {
-        const { accountName, balance } = data;
-        if (!accountName) {
-            alert('Nome da conta é obrigatório');
-            return;
-        }
-        if (!balance) {
-            alert('Saldo é obrigatório');
-            return;
-        }
-        if (balance < 0) {
-            alert('Saldo não pode ser negativo');
-            return;
-        }
+    const handleDisableAccount = async () => {
         try {
-            await api.post('/account', {
-                name: accountName,
-                category: openBankingModalAccount ? 'conta_bancaria' : 'conta_caixa',
-                bankId: '032250b8-1437-4dd3-8aff-76d64970cd3a',
-                balance: balance,
-                situation: true,
-                user_id: '032250b8-1437-4dd3-8aff-76d64970cd3a'
-            })
+            await api.put(`http://localhost:3000/account/disable/${currentAccount}`)
+            await queryClient.invalidateQueries(['accounts'])
+            setOpenModalInactivate(false)
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const handleEditAccount = async (data) => {
+        const { accountName, bank, balance, initialBalanceDate } = data.account;
+        try {
+            await api.post('http://localhost:3000/account/update', {
+                id: currentAccount,
+                accountName,
+                balance: Number(balance),
+                bank,
+                initialBalanceDate: dateToIso(initialBalanceDate)
+            })
+            await queryClient.invalidateQueries(['accounts'])
+            setOpenBankingModalEditAccount(false)
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
+    const handleEditAccountBankBox = async (data) => {
+        const { accountName, balance } = data.account;
+        try {
+            await api.post('http://localhost:3000/account/update', {
+                id: currentAccount,
+                accountName,
+                balance: Number(balance)
+            })
+            await queryClient.invalidateQueries(['accounts'])
+            setOpenBankingModalEditAccountBox(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const openInactivate = (accountId: string) => {
+        setCurrentAccount(accountId)
+        setOpenModalInactivate(true)
+    }
+
+    const openEditAccount = async (id: string) => {
+        try {
+            setCurrentAccount(id);
+            const { data } = await api.get(`http://localhost:3000/account/${id}`);
+            const { name, balance, bankId, initialBalanceDate, defaultAcc } = data.account;
+            if(data.account.category === 'Conta Bancaria') {
+                setValue('account', {
+                    accountName: name,
+                    bank: bankId,
+                    balance,
+                    initialBalanceDate: dateToString(initialBalanceDate),
+                    defaultAccount: defaultAcc
+                })
+                setOpenBankingModalEditAccount(true)
+            } 
+            if(data.account.category === 'Conta Caixa') {
+                setValue('account', {
+                    accountName: name,
+                    balance
+                })
+                setOpenBankingModalEditAccountBox(true)
+            } 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const buttonConfig = {
+        option: [
+            { text: 'Editar', icon: <i className='fa fa-edit'></i>, callback: openEditAccount },
+            { text: 'Inativar', icon: <i className='fa fa-archive'></i>, callback: openInactivate },
+        ]
     }
 
     return (
@@ -133,7 +214,7 @@ const List = () => {
                         name='search'
                         onchange={(value) => setSearch(value)}
                         callback={console.log}
-                        placeholder='Pesquisar por Nome, CPF...'
+                        placeholder='Pesquisar por Nome, Tipo...'
                         style={{ marginLeft: 44, width: '50%', maxWidth: 370, minWidth: 270 }}
                     />
                 </div>
@@ -144,13 +225,13 @@ const List = () => {
                 <Grid
                     config={gridConfig}
                     rows={filteredData}
-                    button={gridButtonConfigs}
+                    button={buttonConfig}
                 />
             ) : (
                 <Grid
                     config={gridConfig}
                     rows={data}
-                    button={gridButtonConfigs}
+                    button={buttonConfig}
                 />
             ))}
             {openSelectModalAccount &&
@@ -168,14 +249,32 @@ const List = () => {
             }
             <form onSubmit={handleSubmit(handleSaveAccountBank)}>
                 {openBankingModalAccount && <ModalSelectAccountWithFooter title='Cadastrar Conta Bancária' onclick={() => handleSubmit(handleSaveAccountBank)} close={() => setOpenBankingModalAccount(false)}>
-                    <ModalAccountBank register={register} setValue={setValue} getValues={getValues} control={control} bankImg={BankImg} selectBanksOptions={selectBanksOptions} />
+                    <ModalAccountBank register={register} setValue={setValue} getValues={getValues} control={control} bankImg={IconBank} selectBanksOptions={banks} />
+                </ModalSelectAccountWithFooter>}
+            </form>
+            <form onSubmit={handleSubmit(handleEditAccount)}>
+                {openBankingModalEditAccount && <ModalSelectAccountWithFooter title='Editar Conta Bancária' onclick={() => handleSubmit(handleEditAccount)} close={() => setOpenBankingModalEditAccount(false)}>
+                    <ModalAccountBank register={register} setValue={setValue} getValues={getValues} control={control} bankImg={IconBank} selectBanksOptions={banks} />
                 </ModalSelectAccountWithFooter>}
             </form>
             <form onSubmit={handleSubmit(handleSaveAccountBankBox)}>
                 {openBankingModalAccountBox && <ModalSelectAccountWithFooter title='Cadastrar Conta Caixa' onclick={() => handleSubmit(handleSaveAccountBankBox)} close={() => setOpenBankingModalAccountBox(false)}>
-                    <ModalAccountBox register={register} control={control} bankImg={BankImg} />
+                    <ModalAccountBox register={register} control={control} bankImg={IconBox} />
                 </ModalSelectAccountWithFooter>}
             </form>
+            <form onSubmit={handleSubmit(handleEditAccountBankBox)}>
+                {openBankingModalEditAccountBox && <ModalSelectAccountWithFooter title='Editar Conta Caixa' onclick={() => handleSubmit(handleEditAccountBankBox)} close={() => setOpenBankingModalEditAccountBox(false)}>
+                    <ModalAccountBox register={register} control={control} bankImg={IconBox} />
+                </ModalSelectAccountWithFooter>}
+            </form>
+            {openModalInactivate && (
+                <ModalConfirmation 
+                    close={() => setOpenModalInactivate(false)} 
+                    setOk={() => handleDisableAccount()}
+                    title="Inactivate Conta"
+                    description="Tem certeza que deseja inativar essa Conta?"
+                />
+            )}
         </main>
     )
 }

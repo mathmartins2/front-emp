@@ -8,5 +8,5 @@ export const ViewIntroductionService = lazy(() => import("./view/service/introdu
 export const ViewCreatedService = lazy(() => import("./view/service/created"));
 export const ViewListService = lazy(() => import("./view/service/list"));
 export const ViewMobileService = lazy(() => import("./view/service/mobile"));
-export const ViewAccount = lazy(() => import("./view/account/list"));
-export const List = lazy(() => import("./view/account/list/List"));
+export const ViewAccount = lazy(() => import("./view/account/list/List"));
+export const ViewAccountIntroduction = lazy(() => import("./view/account/introduction"));

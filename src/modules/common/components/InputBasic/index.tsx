@@ -120,11 +120,11 @@ export const InputMask = ({ title, maskstring, register, required, iconleft, ico
   );
 };
 
-export const InputDate = ({ title, style, required, register, useformcontrol }: IPropsMask) => {
+export const InputDate = ({ title, style, required, register }: IPropsMask) => {
   return (
     <fieldset className={styleInput["groupInput"]} style={style}>
       <label className={styleInput["groupInput__title"]}>{title}{required && <span>*</span>}</label>
-      <input className={styleInput["input__date"]} type="date" />
+      <input {...register} className={styleInput["input__date"]} type="date" />
     </fieldset>
   );
 };

@@ -99,7 +99,7 @@ export const ModalConfirmation = ({ close, setOk, title, description }: IPropsCo
     )
 }
 
-export const ModalSelectAccountWithFooter = ({ children, close, title, onclick }: IPropsSelectAccount) => {
+export const ModalSelectAccountWithFooter = ({ children, close, title }: IPropsSelectAccount) => {
     const modal = useRef<HTMLDivElement>(null)
 
     function closeModal(event: React.MouseEvent) {
@@ -153,7 +153,7 @@ export const ModalAccountBox = ({ register, control, bankImg }: ModalAccountProp
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <InputBasic
                     title={'Nome da conta'}
-                    register={register("accountName")}
+                    register={register("account.accountName")}
                     required={true}
                     placeholder={'Ex: Conta Corrente'}
                     style={{ width: '70%' }}
@@ -161,7 +161,7 @@ export const ModalAccountBox = ({ register, control, bankImg }: ModalAccountProp
                 <InputMoney
                     useformcontrol={control}
                     title={'Saldo inicial'}
-                    register={register("balance")}
+                    register={register("account.balance")}
                     required={true}
                     placeholder={'Ex: Conta Corrente'}
                     style={{ width: '30%', marginLeft: '20px' }}
@@ -177,7 +177,7 @@ export const ModalAccountBank = ({ register, getValues, setValue, control, selec
             <div className={styled["modal__bank"]}>
                 <SelectBasic
                     title='Banco'
-                    register={register("bank")}
+                    register={register("account.bank")}
                     setvalue={setValue}
                     getvalue={getValues}
                     required={true}
@@ -191,7 +191,7 @@ export const ModalAccountBank = ({ register, getValues, setValue, control, selec
             <div className={styled["modal__bank__inputs"]}>
                 <InputBasic
                     title={'Nome da conta'}
-                    register={register("accountName")}
+                    register={register("account.accountName")}
                     required={true}
                     placeholder={'Ex: Conta Corrente'}
                     style={{ width: '70%' }}
@@ -199,7 +199,7 @@ export const ModalAccountBank = ({ register, getValues, setValue, control, selec
                 <InputMoney
                     useformcontrol={control}
                     title={'Saldo inicial'}
-                    register={register("balance")}
+                    register={register("account.balance")}
                     required={true}
                     placeholder={'Ex: Conta Corrente'}
                     style={{ width: '30%', marginLeft: '20px' }}
@@ -210,12 +210,12 @@ export const ModalAccountBank = ({ register, getValues, setValue, control, selec
                     style={{ marginTop: '20px', maxWidth: '30%' }}
                     useformcontrol={control}
                     title={'Data do saldo inicial'}
-                    register={register('date')}
+                    register={register('account.initialBalanceDate')}
                     required={true}
                 />
             </div>
             <div className={styled["modal__bank__default__checkbox"]}>
-                <input {...register('defaultAccount')} type="checkbox" />
+                <input {...register('account.defaultAccount')} type="checkbox" />
                 <label>
                     Definir conta como <b>conta padrão</b>, onde você
                     realiza o maior número de pagamentos e recebimentos

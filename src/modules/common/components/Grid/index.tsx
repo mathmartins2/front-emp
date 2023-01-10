@@ -64,6 +64,18 @@ const Grid = ({ config, rows, button, style }: IGrid) => {
         }
     }
 
+    function teste(column: string) {
+        if(column.startsWith('R$')) {
+            const value = column.replace('R$', '');
+            if (Number(value) < 0) return <span style={{color: 'red'}}>{column}</span>
+            if (Number(value) > 0) return <span style={{color: 'green'}}>{column}</span>
+        }
+        if(column.includes("<i className='fa fa-check-circle'></i>")) return <i className='fa fa-check-circle'></i>;
+        if(column.includes("<i className='fa fa-times-circle'></i>")) return <i className='fa fa-times-circle'></i>;
+        if(column.includes('../../../../assets/images/')) return <img src={column} alt="" />
+        return column;
+    }
+
     return (
         <div className={styled["grid"]} style={style}>
             <div className={`${styled["grid__row"]} ${styled["grid__header"]}`}>
@@ -89,7 +101,7 @@ const Grid = ({ config, rows, button, style }: IGrid) => {
                                         return (
                                             <div key={index} style={{ width: config[index].size, textAlign: config[index].center ? 'center' : 'left', paddingLeft: config[index].center ? '10px' : '0px' }}>
                                                 <span className={styled["row__content"]}>
-                                                    {column}
+                                                    {teste(column)}
                                                 </span>
                                             </div>
                                         )

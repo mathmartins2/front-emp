@@ -12,7 +12,6 @@ import Grid from '@common/components/Grid';
 import { IFormValue } from './interface';
 
 import styled from './style.module.scss';
-import React from 'react';
 
 const ViewListCliente = () => {
     const navigate = useNavigate();

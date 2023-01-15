@@ -130,7 +130,7 @@ export const ModalSelectAccountWithFooter = ({ children, close, title }: IPropsS
 interface ModalAccountBankProps extends ModalAccountProps {
     getValues: UseFormGetValues<any>
     setValue: UseFormSetValue<any>
-    selectBanksOptions: { text: string; value: string; icon: JSX.Element; }[]
+    selectBanksOptions: { text: string; value: string; icon: JSX.Element; }[] | undefined
 }
 
 interface ModalAccountProps {

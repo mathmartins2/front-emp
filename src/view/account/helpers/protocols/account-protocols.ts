@@ -9,7 +9,8 @@ export {
 export {
   gridConfig,
   selectBanksOptions,
-  selectOptions
+  selectOptions,
+  buttonConfig
 } from '../../list/configs';
 export { useForm } from 'react-hook-form';
 export { ButtonSucess } from '@common/components/Button';

@@ -22,3 +22,10 @@ export const selectOptions = [
 export const selectBanksOptions = [
   { text: 'Banco Itau', value: '1', icon: <img src={'https://empreendeaqui.com.br/assets/images/icons-banco/itau.svg'} alt='Banco Itau' /> },
 ];
+
+export const buttonConfig = ({openEditAccount, openInactivate}) => ({
+  option: [
+    { text: 'Editar', icon: <i className='fa fa-edit'></i>, callback: openEditAccount },
+    { text: 'Inativar', icon: <i className='fa fa-archive'></i>, callback: openInactivate },
+]
+})
